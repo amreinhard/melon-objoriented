@@ -17,16 +17,30 @@ class AbstractMelonOrder(object):
         if self.species == "Christmas":
             base_price *= 1.5
 
-        total = (1 + self.tax) * self.qty * base_price
-
-        if self.qty < 10 and self.order_type != "domestic":
+        if self.order_type == "government":
+            total = base_price * self.qty
+        elif self.qty < 10 and self.order_type != "domestic":
             total += 3
+        else:
+            total = (1 + self.tax) * self.qty * base_price
+
         return total
 
     def mark_shipped(self):
         """Record the fact than an order has been shipped."""
 
         self.shipped = True
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+
+    def __init__(self, species, qty):
+        super(GovernmentMelonOrder, self).__init__(species, qty)
+        self.order_type = "government"
+        self.passed_inspection = False
+
+    def mark_inspection(passed):
+
+        passed_inspection = True
 
 
 class DomesticMelonOrder(AbstractMelonOrder):
