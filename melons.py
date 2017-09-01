@@ -1,5 +1,7 @@
 """Classes for melon orders."""
 
+from random import randint
+
 
 class AbstractMelonOrder(object):
     """Parent code for all types of melon order."""
@@ -10,19 +12,22 @@ class AbstractMelonOrder(object):
         self.qty = qty
         self.shipped = False
 
+    def get_base_price(self):
+        """ implements dynamic algorithm """
+        self.base_price = randint(5, 9)
+        return self.base_price
+
     def get_total(self):
         """Calculate price, including tax."""
+        base = self.get_base_price()
+        print base
+        if self.species.lower == "christmas":
+            base *= 1.5
 
-        base_price = 5
-        if self.species == "Christmas":
-            base_price *= 1.5
+        total = (1 + self.tax) * self.qty * base
 
-        if self.order_type == "government":
-            total = base_price * self.qty
-        elif self.qty < 10 and self.order_type != "domestic":
+        if self.qty < 10 and self.order_type == "international":
             total += 3
-        else:
-            total = (1 + self.tax) * self.qty * base_price
 
         return total
 
@@ -31,16 +36,21 @@ class AbstractMelonOrder(object):
 
         self.shipped = True
 
+
+
+
 class GovernmentMelonOrder(AbstractMelonOrder):
 
     def __init__(self, species, qty):
         super(GovernmentMelonOrder, self).__init__(species, qty)
         self.order_type = "government"
         self.passed_inspection = False
+        self.tax = 0
 
-    def mark_inspection(passed):
+    def mark_inspection(self, passed):
 
-        passed_inspection = True
+        if passed is True:
+            passed_inspection = True
 
 
 class DomesticMelonOrder(AbstractMelonOrder):
